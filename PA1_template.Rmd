@@ -7,19 +7,42 @@ output:
 
 
 ## Loading and preprocessing the data
-
+activity = read.csv("~/Desktop/data/activity.csv")
 
 
 ## What is mean total number of steps taken per day?
-
+totalSteps <- aggregate(steps ~ date, activity, FUN=sum)
 
 
 ## What is the average daily activity pattern?
-
+meanStepsByInt <- aggregate(steps ~ interval, activity, mean)
 
 
 ## Imputing missing values
+missingVals <- is.na(activity$steps)
+new_activity <- transform(activity, steps = ifelse(is.na(activity$steps), meanStepsByInt$steps[match(activity$interval, meanStepsByInt$interval)], activity$steps)) 
 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+DayType <- function(date) {
+   day <- weekdays(date)
+   if (day %in% c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'))
+       return ("weekeday")
+   else if (day %in% c('Saturday', 'Sunday'))
+       return ("weekend")
+   else
+       stop ("Invalid Date Format.")
+ }
+new_activity$date <- as.Date(new_activity$date)
+new_activity$day <- sapply(new_activity$date, FUN = DayType)
+
+meanStepsByDay <- aggregate(steps ~ interval + day, new_activity, mean) 
+ggplot(data = meanStepsByDay, aes(x=interval, y=steps)) +
+	geom_line() +
+	facet_grid(day ~.) +
+	ggtitle("Average Daily Activity Pattern") +
+	xlab("5-minute Interval") +
+	ylab("Average Number of Steps") +
+	theme(plot.title = element_text(hjust=0.5))
+
