@@ -3,7 +3,7 @@ Loading and preprocessing the data
 activity = read.csv("~/Desktop/data/activity.csv")
 ```
 What is mean total number of steps taken per day?
-```{r}
+```{r, echo=TRUE}
 totalSteps <- aggregate(steps ~ date, activity, FUN=sum)
 head(totalSteps)
 ```
@@ -15,12 +15,12 @@ ggplot(data = meanStepsByInt, aes(x = interval, y = steps)) + geom_line() + ggti
 ```
 
 Imputing missing values
-```{r}
+```{r, echo=TRUE}
 missingVals <- is.na(activity$steps)
 new_activity <- transform(activity, steps = ifelse(is.na(activity$steps), meanStepsByInt$steps[match(activity$interval, meanStepsByInt$interval)], activity$steps)) 
 ```
 Are there differences in activity patterns between weekdays and weekends?
-```{r}
+```{r, echo=TRUE}
 DayType <- function(date) {
    day <- weekdays(date)
    if (day %in% c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'))
@@ -42,6 +42,7 @@ ggplot(data = meanStepsByDay, aes(x=interval, y=steps)) +
 	theme(plot.title = element_text(hjust=0.5))
 
 ```
+
 
 
 
