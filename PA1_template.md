@@ -3,8 +3,7 @@
 activity = read.csv("~/Desktop/data/activity.csv")
 ```
 ## What is mean total number of steps taken per day?
-```{r, echo=FALSE}
-knitr::opts_chunk$set(
+```{r, echo=TRUE}
 totalSteps <- aggregate(steps ~ date, activity, FUN=sum)
 head(totalSteps)
 hist(totalSteps$steps, main="Total Steps per Day", xlab="Number of Steps")
@@ -12,7 +11,6 @@ meanSteps <- mean(totalSteps$steps)
 medianSteps <- median(totalSteps$steps)
 meanSteps
 medianSteps
-)
 ```
 ## What is the average daily activity pattern?
 ```{r, echo=TRUE}
